@@ -240,6 +240,8 @@ module p_layer (
 
     assign p_layer_output[63] = s_box_output[63];
 
+endmodule
+
 
 
 
