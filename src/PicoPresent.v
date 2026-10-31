@@ -86,7 +86,7 @@ end
 endmodule
 
 
-// creating the plain text
+// creating the plain text from a single one wire transmitter 
 module plain_text_gen(
     input wire clk,
     input wire external_clk,
@@ -125,10 +125,55 @@ endmodule
 module 
 
 
+// This just updates the text so that it can go through the encyption 32 times
+
+module current_text(
+    input wire clk,
+    input wire [63:0] plain_txt,
+    input wire [63:0] p_layer_output,
+    output reg [63:0] current_plain_txt
+
+
+);
+    
+    initial begin
+        i = 0;
+    end
+
+    genvar i;
+
+    always @(posedge clk) begin
+        if (i == 0) begin
+            
+            current_plain_txt <= plain_txt;
+
+            i = i + 1;
+        end
+
+        else if ( (i > 0) & (i < 31) ) begin
+
+            current_plain_txt <= p_layer_output;
+
+            i <= i + 1;
+
+        end 
+
+        else if ( i > 31) begin
+
+            i = 0;
+        end
+
+    end
+
+endmodule
+
+
+
 // this is the part that jsut does XOR with the current top 64 bits of the key
 module XOR_round(
     input wire clk,
     input wire [63:0] plain_txt,
+    input wire [63:0] current_plain_txt
     input wire [63:0] current_key,
     output wire [63:0] XOR_round_done
 );
@@ -243,6 +288,114 @@ module p_layer (
 endmodule
 
 
+module cypher(
+
+   // this is just the clock to time the rounds
+   input wire clk
+   
+   // this is the key that has undergone the the changes
+   input wire [63:0] current_key,
+   
+   // this is the current 64 bit input that is wating to be encypted
+   input wire [63:0] current_text,
+   
+   // this is the encpryted text that has gone though the 32 rounds of encyption
+   output wire [63:0] cypher_text,
+   
+   // this is the current encrytpion round number so that the controller will know when to feed the next text input in
+   output wire [4:0] current_round
+);
+
+   // just counts the rounds
+   reg [4:0] round;
+   assign current_round = round;
+   
+   // connecting the inputs so that they can be used
+   wire [63:0] text;
+   assign text = current_text;
+   wire {63:0] key;
+   assign key = current_key;
+   
+   
+  // just the register for the first layer
+   reg [63:0] add_round_key_done;
+   
+   // This is the s box reg it is basically just a 2 dimensinal reg
+   // The reason that it has to be split is so that each nibble can be changed
+   reg [3:0] s_box_input [0:15];
+   
+   
+   
+   // this is going to be the main loop that just does the encyryption 32 times
+    always @(posedge clk) begin
+      
+      // the counting loop
+       if ( round < 32) begin
+         
+         // the add key round basically just doing XOR to the key and text
+         add_round_key_done <= key ^ text
+         
+         // This is the s box layer what is does is it swaps each nibble with another predfned one
+         for(i = 0; i <16; i = i + 1) begin
+         
+            // this splits the input into 16 nibbles
+            s_box_input[i] = add_round_key_done[63 4*i -: 4];
+            
+            case (s_box_input[i])
+             // this is box array
+             /* its basicall just
+              0 = C
+             1 = 5
+             2 = 6
+             3 = B
+              4 = 9
+             5 = 0
+             6 = A
+             7 = D
+             8 = 3
+             9 = E
+             A = F
+             B = 8
+             C = 4
+             D = 7
+             E = 1
+             F = 2
+             */
+            
+               4'h0: s_box_output[63 - 4*i -: 4] = 4'hC;
+               4'h1: s_box_output[63 - 4*i -: 4] = 4'h5;
+               4'h2: s_box_output[63 - 4*i -: 4] = 4'h6;
+               4'h3: s_box_output[63 - 4*i -: 4] = 4'hB;
+               4'h4: s_box_output[63 - 4*i -: 4] = 4'h9;
+               4'h5: s_box_output[63 - 4*i -: 4] = 4'h0;
+               4'h6: s_box_output[63 - 4*i -: 4] = 4'hA;
+               4'h7: s_box_output[63 - 4*i -: 4] = 4'hD;
+               4'h8: s_box_output[63 - 4*i -: 4] = 4'h3;
+               4'h9: s_box_output[63 - 4*i -: 4] = 4'hE;
+               4'hA: s_box_output[63 - 4*i -: 4] = 4'hF;
+               4'hB: s_box_output[63 - 4*i -: 4] = 4'h8;
+               4'hC: s_box_output[63 - 4*i -: 4] = 4'h4;
+               4'hD: s_box_output[63 - 4*i -: 4] = 4'h7;
+               4'hE: s_box_output[63 - 4*i -: 4] = 4'h1;
+               4'hF: s_box_output[63 - 4*i -: 4] = 4'h2;
+               default: s_box_ouput[63 - 4*1 -: 4] = 4'h0;
+            endcase   
+         end     
+         
+         
+           
+         
+       
+        
+           
+       
+       
+       
+    
+    
+
+
+  
 
 
 
