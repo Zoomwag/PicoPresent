@@ -7,8 +7,8 @@ module top(
     output wire uart_tx_o
 );
 
-    // UART timing: 100 MHz clock, 115200 baud
-    parameter BIT_PERIOD = 868;
+
+    parameter BIT_PERIOD = 50;
 
     // UART receiver
     wire [7:0] received_data;
@@ -45,9 +45,8 @@ module top(
     parameter WAIT_TX      = 3'd4;
 
 
-    // ==========================================
+
     // UART RECEIVER
-    // ==========================================
 
     uart_rx #(
         .BIT_PERIOD(BIT_PERIOD)
@@ -60,9 +59,9 @@ module top(
     );
 
 
-    // ==========================================
+
     // UART TRANSMITTER
-    // ==========================================
+
 
     uart_tx #(
         .BIT_PERIOD(BIT_PERIOD)
@@ -77,9 +76,8 @@ module top(
     );
 
 
-    // ==========================================
-    // PRESENT-80 ENCRYPTION CORE
-    // ==========================================
+    // PRESENT-80 bit
+
 
     cypher cipher_core (
         .clk(clk),
@@ -93,9 +91,8 @@ module top(
     );
 
 
-    // ==========================================
     // MAIN CONTROLLER
-    // ==========================================
+
 
     always @(posedge clk) begin
 
@@ -125,9 +122,9 @@ module top(
             case (state)
 
 
-                // ----------------------------------
+       
                 // RECEIVE 10 KEY BYTES + 8 TEXT BYTES
-                // ----------------------------------
+
 
                 RX_INPUT: begin
 
@@ -171,9 +168,9 @@ module top(
                 end
 
 
-                // ----------------------------------
+          
                 // START ENCRYPTION
-                // ----------------------------------
+    
 
                 START_CIPHER: begin
 
@@ -183,9 +180,8 @@ module top(
                 end
 
 
-                // ----------------------------------
                 // WAIT FOR ENCRYPTION
-                // ----------------------------------
+
 
                 WAIT_CIPHER: begin
 
@@ -201,9 +197,7 @@ module top(
                 end
 
 
-                // ----------------------------------
-                // SEND NEXT CIPHERTEXT BYTE
-                // ----------------------------------
+                // SEND NEXT BYTE
 
                 START_TX: begin
 
@@ -215,9 +209,8 @@ module top(
                 end
 
 
-                // ----------------------------------
-                // WAIT FOR UART TRANSMISSION
-                // ----------------------------------
+                // WAIT FOR TRANSMISSION
+-
 
                 WAIT_TX: begin
 
@@ -248,9 +241,9 @@ module top(
                 end
 
 
-                // ----------------------------------
-                // INVALID STATE RECOVERY
-                // ----------------------------------
+
+                // INVALID
+
 
                 default: begin
 
