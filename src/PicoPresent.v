@@ -191,7 +191,7 @@ module cypher_round(
 
             // this splits the input into 16 nibbles
             // using a shift because indexed part-selects are not supported here
-            s_box_input[i] = add_round_key_done >> (63 - (4*i));
+            s_box_input[i] = add_round_key_done >> (60 - (4*i));
 
             s_box_value = 4'h0;
 
