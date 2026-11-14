@@ -9,12 +9,11 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+It basiclly just uses the present 80 encypyion algorithm. It send both the the key and the data over uart so that it is fully decentrlaized form ur laptop
 
 ## How to test
 
-Explain how to use your project
+you can test it by using the otyin sriupt in the rep
 
 ## External hardware
-
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+u just need a uart 
