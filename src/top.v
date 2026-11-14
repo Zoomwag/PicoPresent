@@ -25,7 +25,7 @@ module top(
     reg [63:0] plaintext_register;
 
     wire [63:0] cipher_result;
-    wire [5:0] cipher_round;
+
     wire cipher_done;
 
     reg cipher_start;
@@ -86,7 +86,7 @@ module top(
         .current_key(key_register),
         .current_text(plaintext_register),
         .cypher_text(cipher_result),
-        .current_round(cipher_round),
+        .current_round(),
         .done(cipher_done)
     );
 
