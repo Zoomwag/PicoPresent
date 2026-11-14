@@ -1,40 +1,70 @@
-# SPDX-FileCopyrightText: © 2024 Tiny Tapeout
-# SPDX-License-Identifier: Apache-2.0
-
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
+from cocotb.triggers import Timer, RisingEdge
+
+CLOCK_PERIOD_NS = 20       # 50 MHz
+UART_BIT_CYCLES = 25       # 2 Mbps at 50 MHz
+
+
+async def uart_send_byte(dut, value):
+    # UART 8-N-1, least-significant bit first.
+    dut.ui_in.value = 0x00
+    for _ in range(UART_BIT_CYCLES):
+        await RisingEdge(dut.clk)
+    for bit in range(8):
+        dut.ui_in.value = (value >> bit) & 1
+        for _ in range(UART_BIT_CYCLES):
+            await RisingEdge(dut.clk)
+    dut.ui_in.value = 1
+    for _ in range(UART_BIT_CYCLES):
+        await RisingEdge(dut.clk)
+
+
+async def uart_receive_byte(dut, timeout_cycles=10000):
+    # Wait for the falling edge of the UART start bit.
+    for _ in range(timeout_cycles):
+        await RisingEdge(dut.clk)
+        if int(dut.uo_out.value) & 1 == 0:
+            break
+    else:
+        raise AssertionError("Timed out waiting for UART TX start bit")
+
+    # Move to the centre of data bit 0: 1.5 bit periods from start edge.
+    for _ in range(UART_BIT_CYCLES + UART_BIT_CYCLES // 2):
+        await RisingEdge(dut.clk)
+
+    value = 0
+    for bit in range(8):
+        value |= (int(dut.uo_out.value) & 1) << bit
+        for _ in range(UART_BIT_CYCLES):
+            await RisingEdge(dut.clk)
+    return value
 
 
 @cocotb.test()
-async def test_project(dut):
-    dut._log.info("Start")
-
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, unit="us")
-    cocotb.start_soon(clock.start())
-
-    # Reset
-    dut._log.info("Reset")
+async def present_zero_vector_over_uart(dut):
+    dut.ui_in.value = 1
     dut.ena.value = 1
-    dut.ui_in.value = 0
     dut.uio_in.value = 0
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
+
+    cocotb.start_soon(Clock(dut.clk, CLOCK_PERIOD_NS, unit="ns").start())
+    for _ in range(5):
+        await RisingEdge(dut.clk)
     dut.rst_n.value = 1
+    for _ in range(5):
+        await RisingEdge(dut.clk)
 
-    dut._log.info("Test project behavior")
+    # PRESENT-80 zero key (10 bytes) followed by zero plaintext (8 bytes).
+    for byte in bytes(18):
+        await uart_send_byte(dut, byte)
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    result = bytearray()
+    for _ in range(8):
+        result.append(await uart_receive_byte(dut))
 
-    # Wait for one clock cycle to see the output values
-    await ClockCycles(dut.clk, 1)
-
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
-
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    expected = bytes.fromhex("5579C1387B228445")
+    assert bytes(result) == expected, (
+        f"Wrong ciphertext: got {bytes(result).hex().upper()}, "
+        f"expected {expected.hex().upper()}"
+    )
