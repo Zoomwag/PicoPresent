@@ -1,50 +1,49 @@
-# Tiny Tapeout GF180MCU project configuration
-project:
-  # The HDL files are located in ./src and listed relative to that directory.
-  top_module: "tt_um_zoomwag_picopresent"
-  source_files:
-    - "project.v"
-    - "top.v"
-    - "PicoPresent.v"
-    - "uart_rx.v"
-    - "uart_tx.v"
-  tiles: "1x1"
-  yaml_version: 6
+# Tiny Tapeout project information for PicoPresent
 
-documentation:
+project:
   title: "PicoPresent"
   author: "Zoomwag"
   discord: ""
-  description: "Iterative PRESENT-80 encryption core with a UART serial interface."
+  description: "Iterative PRESENT-80 encryption core with UART serial interface."
   language: "Verilog"
   clock_hz: 50000000
-  how_it_works: "The Tiny Tapeout wrapper adapts the existing PicoPresent top-level controller to the Tiny Tapeout interface. It receives ten key bytes (80 bits), followed by eight plaintext bytes (64 bits), runs the iterative PRESENT-80 cipher, and transmits eight ciphertext bytes. The existing cipher and UART modules are included as separate source files."
-  how_to_test: "Provide a 50 MHz clock and an active-low reset on rst_n. Connect a UART transmitter to ui_in[0] and a UART receiver to uo_out[0]. Use 2,000,000 baud, 8 data bits, no parity, and one stop bit (8-N-1). Send the 80-bit key as ten bytes, most-significant byte first, followed by the 64-bit plaintext as eight bytes, most-significant byte first. Read eight ciphertext bytes, most-significant byte first. For the standard PRESENT-80 known-answer test, send an all-zero key and all-zero plaintext; the expected ciphertext is 5579C1387B228445."
-  external_hw: "An external 50 MHz clock source and a UART-capable host/interface are required."
-  inputs:
-    - "UART RX on ui_in[0]"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-  outputs:
-    - "UART TX on uo_out[0]"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-  bidirectional:
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
-    - "Unused"
+  tiles: "1x1"
+  top_module: "tt_um_zoomwag_picopresent"
+  source_files:
+    - "project.v"
+    - "PicoPresent.v"
+    - "top.v"
+    - "uart_rx.v"
+    - "uart_tx.v"
+
+# Pin descriptions for the Tiny Tapeout datasheet.
+pinout:
+  ui[0]: "UART RX"
+  ui[1]: ""
+  ui[2]: ""
+  ui[3]: ""
+  ui[4]: ""
+  ui[5]: ""
+  ui[6]: ""
+  ui[7]: ""
+
+  uo[0]: "UART TX"
+  uo[1]: ""
+  uo[2]: ""
+  uo[3]: ""
+  uo[4]: ""
+  uo[5]: ""
+  uo[6]: ""
+  uo[7]: ""
+
+  uio[0]: ""
+  uio[1]: ""
+  uio[2]: ""
+  uio[3]: ""
+  uio[4]: ""
+  uio[5]: ""
+  uio[6]: ""
+  uio[7]: ""
+
+# Do not change this version.
+yaml_version: 6
