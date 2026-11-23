@@ -1,209 +1,112 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
 
-# demo
-https://zoomwag.github.io/PicoPresent/
 
 
 # PICOPRESENT
-### Custom ASIC Design & Implementation
+### Designing and Building a Custom Cryptographic ASIC
 
-**Author:** [Name]  
-**Date:** [Date]  
-**Version:** 1.0
 
-![Project Hero Image](images/hero.png)
 
-> A short one-sentence description of the project.
+Author: Jonathan Bercovici  
 
----
 
-# 01 — Project Overview
+<img width="3467" height="3254" alt="gds_render" src="https://github.com/user-attachments/assets/6de77ddb-b7df-4cf2-ac88-40b4a6a77397" />
 
-[Short introduction: 2–3 sentences.]
-
-![Project Photograph](images/project.jpg)
-
-| Parameter | Specification |
-|---|---|
-| Cipher | PRESENT-80 |
-| Block size | 64-bit |
-| Key size | 80-bit |
-| Language | Verilog |
-| Architecture | [Your architecture] |
 
 ---
 
-# 02 — Objectives
+# 01 — The Idea
 
-[Briefly introduce what you set out to achieve.]
+I was given an amazing oppurtinity by hackclub to get a slot on the on the wafer.space GF180MCU Run 3 MPW (multi-project-wafer) from DeepAI. When I first found this out i was in shock. In the past i had built very simple cpus in verilog, but now since i had the chance to have it in real life i wanted to build something that is acutally usefull. I didnt want to just build another cpu as that has been done so so so many times i wanted something oringial. A few ideas that i had at first was a driver for an led board ( i know this sounds pretty dull) and then another one was a vga clk, But all of these were pretty boring. I wanted something much cooler. Then it hit me. 
 
-- [Objective 1]
-- [Objective 2]
-- [Objective 3]
-- [Objective 4]
+A crypto graphic acclerater
 
-![Design Goals](images/objectives.png)
+![Initial Concept](images/initial-concept.png)
 
----
+# 02 — Research & Planning
 
-# 03 — Background & Research
+## Choosing PRESENT-80
 
-## 3.1 PRESENT-80
+[Why did you choose this algorithm?]
 
-[Short explanation of the encryption algorithm.]
+![PRESENT Architecture](images/present.png)
 
-![PRESENT Cipher Diagram](images/present-algorithm.png)
+## Initial Design
 
-## 3.2 How It Works
+![Initial Block Diagram](images/initial-design.png)
 
-[Brief explanation of the encryption process.]
+# 03 — Designing the Architecture
 
-![Encryption Round Diagram](images/encryption-round.png)
+[How did you plan the hardware?]
 
----
+![Architecture Diagram](images/architecture.png)
 
-# 04 — System Architecture
-
-[One or two sentences introducing the overall design.]
-
-![Full System Architecture](images/system-architecture.png)
-
-## 4.1 Module Breakdown
+## Module Breakdown
 
 | Module | Purpose |
 |---|---|
-| [Module 1] | [Purpose] |
-| [Module 2] | [Purpose] |
-| [Module 3] | [Purpose] |
+| [Module] | [Purpose] |
 
-![Module Hierarchy](images/module-hierarchy.png)
+# 04 — Writing the RTL
 
----
+[How did you approach implementing the design in Verilog?]
 
-# 05 — RTL Implementation
+![RTL Development](images/rtl.png)
 
-[Briefly describe your Verilog implementation.]
+## Key Modules
 
-## 5.1 Key Generation
+[Important code snippets and explanations.]
 
-![Key Generation Architecture](images/key-generation.png)
+# 05 — Problems & Iterations
 
-[Short explanation of the key generation logic.]
+[What didn't work initially?]
 
-## 5.2 Encryption Datapath
+![Design Iterations](images/iterations.png)
 
-![Datapath Diagram](images/datapath.png)
+| Problem | Solution |
+|---|---|
+| [Problem] | [Solution] |
 
-[Short explanation of the datapath.]
+# 06 — Verification
 
-## 5.3 Control Logic
+[How did you prove the design worked?]
 
-![Control Logic Diagram](images/control-logic.png)
+![Testbench](images/testbench.png)
 
-[Short explanation of the control logic.]
-
-## 5.4 Important RTL
-
-```verilog
-// Insert a relevant Verilog code snippet
-```
-
----
-
-# 06 — Verification & Testing
-
-[Brief explanation of your verification approach.]
-
-## 6.1 Testbench Architecture
-
-![Testbench Diagram](images/testbench.png)
-
-## 6.2 Test Vectors
-
-| Input | Expected Output | Actual Output | Result |
-|---|---|---|---|
-| [Input] | [Expected] | [Actual] | [Pass/Fail] |
-
-## 6.3 Simulation Evidence
-
-![Simulation Screenshot](images/simulation.png)
-
-[Brief interpretation of the results.]
-
----
+![Simulation Results](images/simulation.png)
 
 # 07 — Synthesis
 
-[Explain which synthesis tools and processes you used.]
+[How did you turn the RTL into a synthesised hardware design?]
 
-![Synthesis Flow Diagram](images/synthesis-flow.png)
+![Synthesis Flow](images/synthesis-flow.png)
 
-## 7.1 Synthesis Results
-
-| Metric | Result |
-|---|---|
-| Cell count | [ ] |
-| Logic area | [ ] |
-| Critical path | [ ] |
-| Estimated frequency | [ ] |
-
-![Synthesis Report](images/synthesis-report.png)
-
----
+![Synthesis Results](images/synthesis-results.png)
 
 # 08 — Optimisation
 
-[Brief introduction to your optimisation process.]
+[What did you change to improve the design?]
 
-## 8.1 Changes Made
+![Optimisation Comparison](images/optimisation.png)
 
-| Change | Reason | Outcome |
-|---|---|---|
-| [Change] | [Reason] | [Result] |
-
-![Before and After Comparison](images/optimisation.png)
-
----
-
-# 09 — Final Results
+# 09 — Final Design
 
 ![Final Architecture](images/final-design.png)
 
-## Performance Summary
+## Final Results
 
-| Metric | Final Result |
+| Metric | Result |
 |---|---|
-| Functional verification | [ ] |
-| Synthesis status | [ ] |
-| Area | [ ] |
-| Timing | [ ] |
+| [Metric] | [Result] |
 
----
+# 10 — What I Learned
 
-# 10 — Limitations & Future Work
+[What did you learn from building this?]
 
-[Keep this concise.]
+# 11 — What's Next?
 
-- [Current limitation]
-- [Possible improvement]
-- [Future development]
-
----
-
-# 11 — Conclusion
-
-[Short concluding paragraph.]
-
----
+[What would you like to develop further?]
 
 # References
+[Technical references and documentation.]
 
-1. [Reference]
-2. [Reference]
-3. [Reference]
-
----
-
-# Appendix
-
-[Additional diagrams, code references, test results and supporting material.]
