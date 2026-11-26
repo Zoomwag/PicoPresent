@@ -21,25 +21,22 @@ I was given an amazing oppurtinity by hackclub to get a slot on the on the wafer
 
 A crypto graphic acclerater
 
-![Initial Concept](images/initial-concept.png)
 
 # 02 — Research & Planning
 
 ## Choosing PRESENT-80
 
-[Why did you choose this algorithm?]
+I orignally chose the present 80 algorithm beccasue it is basically impossible to break. Right now i dont think there are any known ways to crack it apart from just fully brute forcing it. Another reason why it is so good is that it runs on very little hardware
 
-![PRESENT Architecture](images/present.png)
+<img width="1024" height="448" alt="image" src="https://github.com/user-attachments/assets/2b651f3b-4063-44e3-a34b-723a76058b67" />
+This is a simple overview of the of the encypption used in pico presnet. On either side you can see the two simaltanius things happenign at the same time. The one of the left is the main encpytoin and the part on the right is the jey shuffler. 
 
-## Initial Design
 
-![Initial Block Diagram](images/initial-design.png)
+
 
 # 03 — Designing the Architecture
 
-[How did you plan the hardware?]
-
-![Architecture Diagram](images/architecture.png)
+The overal achrietiuter is that we have
 
 ## Module Breakdown
 
