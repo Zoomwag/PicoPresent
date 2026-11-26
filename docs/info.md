@@ -9,11 +9,11 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-It basiclly just uses the present 80 encypyion algorithm. It send both the the key and the data over uart so that it is fully decentrlaized form ur laptop
+PicoPresent uses the PRESENT-80 encryption algorithm directly baked into the  hardware. It takes a 64-bit plaintext and an 80-bit encryption key, processes them through 31 rounds of substitution, permutation and key mixing, and produces a 64-bit ciphertext.
 
 ## How to test
 
-you can test it by using the otyin sriupt in the rep
+A Python script running on a computer sends plaintext and encryption keys to the chip over UART. It then receives the ciphertext and compares it against the expected result to verify that the hardware is working correctly.
 
 ## External hardware
-u just need a uart 
+A UART interface is needed to let the asic talk to the computer, using a USB-to-UART adapter or microcontroller.
